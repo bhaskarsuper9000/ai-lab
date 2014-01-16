@@ -1,0 +1,16 @@
+(a) 2-input NAND, NOR
+[-3, -2, -4] was found in 18 iterations
+[-2, -2, -1] was found in 9 iterations
+
+(b) 2-input XOR
+Cycle Detected in 11 iterations
+
+(c) 5-input palindrome
+Cycle Detected in 21 iterations
+
+(d) 5-input majority (1 if #1s > #0s, else 0)
+[4, 4, 4, 3, 3, 9] was found in 67 iterations
+
+(e) 6-input parity (even parity; #1s is even)
+Cycle Detected in 11 iterations
+

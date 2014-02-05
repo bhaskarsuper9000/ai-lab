@@ -100,12 +100,12 @@ class PerceptronTrainer{
 
         pt = new PerceptronTrainer();
         //the parameter to the constructor is the no of input variables
-        TruthTableGenerator tt_gen= new TruthTableGenerator(2);
+        TruthTableGenerator tt_gen= new TruthTableGenerator(7);
 
         //setFuncType allows you to either choose from a set of 
         //well known functions like AND, OR, NAND, NOR, XOR, XNOR, 
         //PALINDROME, MAJORITY, EVEN_PARITY & MANUAL
-        tt_gen.setFuncType(TruthTableGenerator.NAND);
+        tt_gen.setFuncType(TruthTableGenerator.DIGIT_ONE);
         tt = tt_gen.generateTT();
         pt.train(tt);
         

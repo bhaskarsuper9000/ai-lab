@@ -16,7 +16,19 @@ class TruthTableGenerator {
     final static int PALINDROME  = 6; 
     final static int EVEN_PARITY  = 7;
     final static int MAJORITY = 8;
-    
+
+    //seven segment entries
+    final static int DIGIT_ZERO  = 9;
+    final static int DIGIT_ONE   = 10;
+    final static int DIGIT_TWO   = 11;
+    final static int DIGIT_THREE = 12;
+    final static int DIGIT_FOUR  = 13;
+    final static int DIGIT_FIVE  = 14;
+    final static int DIGIT_SIX   = 15;
+    final static int DIGIT_SEVEN = 16;
+    final static int DIGIT_EIGHT = 17;
+    final static int DIGIT_NINE  = 18;
+
     final static int MANUAL = 100;
     
     //for n boolean input variables
@@ -54,6 +66,7 @@ class TruthTableGenerator {
     }
     public int func(Vector2D vn){
         boolean result = false;
+        int count0 = 0;
 
         switch(funcType){
             case NAND:
@@ -133,6 +146,116 @@ class TruthTableGenerator {
             }
             if( count1 > (vn.v.size()/2) )
                 result = true;
+            break;
+
+            case DIGIT_ZERO:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            //int count0 = 0;
+            if(vn.v.get(0) == 0 && vn.v.get(1)== 1 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 1 )
+                result = true;
+            break;
+
+            case DIGIT_ONE:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            //int count0 = 0;
+            if(vn.v.get(0) == 0 && vn.v.get(1)== 0 && vn.v.get(2)== 0 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 0 && vn.v.get(6)== 0 )
+                result = true;
+            break;
+            
+            case DIGIT_TWO:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 0 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 0 && vn.v.get(5)== 1 && vn.v.get(6)== 1 )
+                result = true;
+
+            break;
+
+            case DIGIT_THREE:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 0 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 0 )
+                result = true;
+
+            break;
+           
+            case DIGIT_FOUR:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 1 && vn.v.get(2)== 0 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 0 && vn.v.get(6)== 0 )
+                result = true;
+
+            break;
+            
+            case DIGIT_FIVE:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 1 && vn.v.get(2)== 1 && vn.v.get(3)== 0
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 0 )
+                result = true;
+
+            break;
+ 
+            case DIGIT_SIX:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 0 && vn.v.get(1)== 1 && vn.v.get(2)== 1 && vn.v.get(3)== 0 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 1 )
+                result = true;
+
+            break;
+
+            case DIGIT_SEVEN:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 0 && vn.v.get(1)== 0 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 0 && vn.v.get(6)== 0 )
+                result = true;
+
+            break;
+
+            case DIGIT_EIGHT:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 1 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 1 )
+                result = true;
+
+            break;
+
+            case DIGIT_NINE:
+            if(vn.v.size()<6){
+                throw new RuntimeException("Input Vector should have at least 7 inputs");               
+            }
+            result = false;
+            if(vn.v.get(0) == 1 && vn.v.get(1)== 1 && vn.v.get(2)== 1 && vn.v.get(3)== 1 
+                && vn.v.get(4)== 1 && vn.v.get(5)== 1 && vn.v.get(6)== 0 )
+                result = true;
+
             break;
 
             default:

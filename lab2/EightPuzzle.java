@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 class Point{ int x,y; Point(int x, int y){this.x=x; this.y=y;}}
 class EightPuzzle extends Problem{
 
@@ -10,9 +12,10 @@ class EightPuzzle extends Problem{
 		//set the states to a default problem
 		start   = new EightPuzzleState();
 		current = new EightPuzzleState();
-		EightPuzzleState tempSt  = new EightPuzzleState();
+		EightPuzzleState tempSt = new EightPuzzleState();
 		
-		tempSt.swap(new Point(2,1), new Point(2,2));
+		int t[][] = {{1,2,3},{4,5,6},{7,8,0}};
+		tempSt.setGrid(t);
 		goal = tempSt;
 		
 		setHeuristic(DISPLACED_TILE);
@@ -65,18 +68,22 @@ class EightPuzzle extends Problem{
 	
 		switch(move){
 			case EightPuzzleMovesList.MOVE_LEFT:
+				System.out.println("Move Left");
 				tempState.swap(p,new Point(p.x-1,p.y));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_RIGHT:
+				System.out.println("Move Right");
 				tempState.swap(p,new Point(p.x+1,p.y));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_UP:
+				System.out.println("Move up");
 				tempState.swap(p,new Point(p.x,p.y-1));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_DOWN:
+				System.out.println("Move Down");
 				tempState.swap(p,new Point(p.x,p.y+1));
 			break;
 		}
@@ -109,6 +116,22 @@ class EightPuzzle extends Problem{
 			break;
 		}
 		return true;
+	}
+	
+	ArrayList<State> getNeighbours(State st){
+		EightPuzzleState s = (EightPuzzleState)st; 
+	
+		int[] moves = new EightPuzzleMovesList().getMovesList();
+		
+		ArrayList<State> newStates = new ArrayList<State>();
+	
+		for(int i=0; i<moves.length; i++){
+			if(isMovePossible(s,moves[i])){
+				newStates.add( runMove(s,moves[i]) );
+			}
+		}
+		
+		return newStates;
 	}
 
 }

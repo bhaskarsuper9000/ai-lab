@@ -13,5 +13,7 @@ class EightPuzzleMovesList extends MovesList{
 		moves[3] = MOVE_DOWN;
 	}
 
-	
+	int[] getMovesList(){
+		return moves;
+	}
 }

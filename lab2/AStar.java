@@ -46,10 +46,14 @@ class AStar{
 			closedSet.add(current);
 			//State tempStates[] = neighbour(current);
 			for( State neighbour : p.getNeighbours(current) ){
-				if(closedSet.contains(neighbour))
+				System.out.println("Neighbour expanded");
+				if(closedSet.contains(neighbour)){
+					System.out.println("Closed Set contains neighbour");
 					continue;
-				
+				}
+
 				int tempScore = current.gScore + p.distBetween(current, neighbour);
+				System.out.println("Dist = "+tempScore);
 				
 				if( openSet.contains(neighbour) || tempScore < neighbour.gScore ){
 					neighbour.cameFrom = current;
@@ -64,7 +68,14 @@ class AStar{
 		return null;
 	}
 	
+	//No of iter
+	//Path length
+	//bidirectional => common pt
+	//parent ptr => ptr - child reln
+	
 	private ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
+		System.out.println("Inside reconstruct path");
+	
 		if( cameFrom.containsKey(currentNode) ){
 			ArrayList<State> p = reconstructPath(cameFrom, cameFrom.get(currentNode));
 			p.add(currentNode);

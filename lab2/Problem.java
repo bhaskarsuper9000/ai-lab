@@ -1,12 +1,26 @@
+import java.util.ArrayList;
+
 class Problem{
-	State start, goal;
+	State start, current, goal;
+	
+	public void setStart(State s){
+		start = s;
+	}
+	
+	public void setGoal(State g){
+		goal = g;
+	}
+	
+	public void setCurrState(State curr){
+		current = curr;
+	}
 	
 	public int getHx(State s){
 		return 0;
 	}
 	
 	public int getGx(){
-		return 0;
+		return 1;
 	}
 	
 	public int getFx(State s){
@@ -17,7 +31,7 @@ class Problem{
 		return s;
 	}
 	
-	public bool isMovePossible(State s, int move){
+	public boolean isMovePossible(State s, int move){
 		return true;
 	}
 	
@@ -33,6 +47,13 @@ class Problem{
 		}
 		
 		return newStates;
+	}
+	
+	int distBetween(State s1, State s2){
+		//the states are not used here doesn't mean they should
+		//be dropped. Its because the difference between the states
+		//could come from another source like a distance matrix,etc
+		return 1;
 	}
 	
 }

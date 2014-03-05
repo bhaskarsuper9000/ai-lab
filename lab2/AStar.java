@@ -10,35 +10,52 @@ class AStar{
 	private PriorityQueue<State> openSet;
 	private HashMap<State, State> cameFrom;
 	
+	Problem p;
+	State current;
+	
 	AStar(){
+		p = new Problem();
+		closedSet = new HashSet<State> ();
+		openSet   = new PriorityQueue<State> ();
+		cameFrom  = new HashMap<State, State> ();
 	}
 	
-	public void AStarSearch(State start, State goal){
-		closedSet.removeAll();
+	public ArrayList<State> aStarSearch(){
+		return aStarSearch(p.start, p.goal);
+	}
+	
+	public ArrayList<State> aStarSearch(State start, State goal){
+		p.setStart(start);
+		p.setGoal(goal);
+	
+	
+		closedSet.clear();
 		openSet.add(start);
-		cameFrom.removeAll();
+		cameFrom.clear();
 		
 		start.gScore = 0;
-		start.fScore = start.getGx() + start.getHx(goal);
+		start.fScore = start.gScore + p.getHx(start);
 		
 		while(openSet.size() > 0){
 			current = openSet.poll();
+			p.setCurrState(current);
+
 			if(current == goal)
 				return reconstructPath(cameFrom, goal);
 				
 			closedSet.add(current);
 			//State tempStates[] = neighbour(current);
-			for( State neighbour : neighbour(current) ){
+			for( State neighbour : p.getNeighbours(current) ){
 				if(closedSet.contains(neighbour))
 					continue;
 				
-				tempScore = current.gScore + distBetween(current, neighbour);
+				int tempScore = current.gScore + p.distBetween(current, neighbour);
 				
-				if( openList.contains(neighbour) || tempScore < neighbour.getGx() ){
+				if( openSet.contains(neighbour) || tempScore < neighbour.gScore ){
 					neighbour.cameFrom = current;
-					neighbour.setGx( tempScore );
-					neighbour.setFx( neighbour.getGx() + neighbour.getHx(goal) );
-					if( !openList.contains(neighbour) ){
+					neighbour.gScore = tempScore;
+					neighbour.fScore = neighbour.gScore + p.getHx(neighbour);
+					if( !openSet.contains(neighbour) ){
 						openSet.add(neighbour);
 					}
 				}
@@ -49,12 +66,13 @@ class AStar{
 	
 	private ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
 		if( cameFrom.containsKey(currentNode) ){
-			ArrayList<State> p = reconstructPath(cameFrom, cameFrom.get(currentNode).value());
+			ArrayList<State> p = reconstructPath(cameFrom, cameFrom.get(currentNode));
 			p.add(currentNode);
 			return p;
 		}else{
-						
-			return new ArrayList<State>().add(currentNode);
+			ArrayList<State> p = new ArrayList<State>();
+			p.add(currentNode);		
+			return p;
 		}
 	}
 	

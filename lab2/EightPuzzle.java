@@ -19,7 +19,7 @@ class EightPuzzle extends Problem{
 		goal = tempSt;
 		start.gScore = 0;
 		
-		setHeuristic(DISPLACED_TILE);
+		setHeuristic(MANHATTEN_DIST);
 	}
 	
 	public void setHeuristic(int n){

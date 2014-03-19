@@ -7,4 +7,8 @@ class State implements Comparable{
 	public int compareTo(Object o){
 		return -1;
 	}
+	
+	public String toString(){
+		return "generic toString() in state: override as per problem";
+	}
 }

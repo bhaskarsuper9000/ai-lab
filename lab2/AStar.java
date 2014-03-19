@@ -21,6 +21,7 @@ class AStar{
 	}
 	
 	public ArrayList<State> aStarSearch(){
+        System.out.println("start = " + p.start + "goal = "+ p. goal);
 		return aStarSearch(p.start, p.goal);
 	}
 	
@@ -39,14 +40,24 @@ class AStar{
 		while(openSet.size() > 0){
 			current = openSet.poll();
 			p.setCurrState(current);
-
-			if(current == goal)
-				return reconstructPath(cameFrom, goal);
+			System.out.println("Next move = "+current+" f(x)="+current.fScore);
+			
+            System.out.println("Checking for goal...");
+			if( current.equals(goal) )
+				return reconstructPath(cameFrom, current);
 				
-			closedSet.add(current);
+			if(current.cameFrom == null)    
+                current.gScore = 0;
+            else
+                current.gScore = current.cameFrom.gScore + p.getGx();
+                
+            //current.fScore = current.gScore + p.getHx(current);
+                
+
+            closedSet.add(current);
 			//State tempStates[] = neighbour(current);
 			for( State neighbour : p.getNeighbours(current) ){
-				System.out.println("Neighbour expanded");
+				System.out.println("neighbour: "+neighbour+ "f(x)="+neighbour.fScore);
 				if(closedSet.contains(neighbour)){
 					System.out.println("Closed Set contains neighbour");
 					continue;
@@ -55,13 +66,45 @@ class AStar{
 				int tempScore = current.gScore + p.distBetween(current, neighbour);
 				System.out.println("Dist = "+tempScore);
 				
-				if( openSet.contains(neighbour) || tempScore < neighbour.gScore ){
+				/*
+				if( openSet.contains(neighbour) || tempScore <= neighbour.gScore ){
 					neighbour.cameFrom = current;
 					neighbour.gScore = tempScore;
 					neighbour.fScore = neighbour.gScore + p.getHx(neighbour);
 					if( !openSet.contains(neighbour) ){
 						openSet.add(neighbour);
 					}
+				}
+				*/
+				
+				if( openSet.contains(neighbour) ){
+					System.out.println("openSet contains neighbour");
+					if(neighbour.cameFrom.gScore > current.gScore){
+						neighbour.cameFrom = current;
+						neighbour.gScore = current.gScore;
+					}
+				}else if( closedSet.contains(neighbour) ){
+					System.out.println("closedSet contains neighbour");
+					if(neighbour.cameFrom.gScore > current.gScore){
+						neighbour.cameFrom = current;
+						neighbour.gScore = current.gScore;
+					}
+					
+					//for all descendents of neighbour, change parent
+					//if reqd
+					for( State des : p.getNeighbours(neighbour) ){
+						if( openSet.contains(des) ){
+							if(des.cameFrom.gScore > neighbour.gScore){
+								des.cameFrom = neighbour;
+								des.gScore = neighbour.gScore;
+							}
+						}								
+					}
+					
+				}else{
+					System.out.println("neither contains neighbour");
+					neighbour.cameFrom = current;
+					openSet.add(neighbour);
 				}
 			}
 		}
@@ -72,18 +115,22 @@ class AStar{
 	//Path length
 	//bidirectional => common pt
 	//parent ptr => ptr - child reln
-	
+	/*private ArrayList<State> path;*/
+
 	private ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
 		System.out.println("Inside reconstruct path");
 	
 		if( cameFrom.containsKey(currentNode) ){
-			ArrayList<State> p = reconstructPath(cameFrom, cameFrom.get(currentNode));
-			p.add(currentNode);
-			return p;
+			System.out.println("Inside if :cameFrom contains currNode");
+            ArrayList<State> path = reconstructPath(cameFrom, cameFrom.get(currentNode));
+			path.add(currentNode);
+			return path;
 		}else{
-			ArrayList<State> p = new ArrayList<State>();
-			p.add(currentNode);		
-			return p;
+			System.out.println("Inside else :cameFrom doesn't contain currNode");
+            ArrayList<State> path = new ArrayList<State>();
+			path.add(currentNode);		
+	        System.out.println("path = "+path);	
+            return path;
 		}
 	}
 	

@@ -5,26 +5,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-class AStar{
-    private HashSet<State> closedSet;
-    private PriorityQueue<State> openSet;
-    private HashMap<State, State> cameFrom;
+class BidirectionalAStar extends Thread{ 
 
-    Problem p;
-    State current;
+    public void run(){
+        Thread t1 = new Thread(this);
+        Thread t2 = new Thread(this);
 
-    AStar(){
-        p = new Problem();
-        closedSet = new HashSet<State> ();
-        openSet   = new PriorityQueue<State> ();
-        cameFrom  = new HashMap<State, State> ();
+        t1.start();
+        t2.start();
+
+        while(t1.p.getCurrent() == t2.p.getCurrent()){
+                t1.
+        }
+
     }
-
-    public ArrayList<State> aStarSearch(){
-        System.out.println("start = " + p.start + "goal = "+ p. goal);
-        return aStarSearch(p.start, p.goal);
-    }
-
     public ArrayList<State> aStarSearch(State start, State goal){
         p.setStart(start);
         p.setGoal(goal);
@@ -38,6 +32,8 @@ class AStar{
         start.fScore = start.gScore + p.getHx(start);
 
         while(openSet.size() > 0){
+            notify();
+
             current = openSet.poll();
             p.setCurrState(current);
             System.out.println("Next move = "+current+" f(x)="+current.fScore);
@@ -99,7 +95,11 @@ class AStar{
                     openSet.add(neighbour);
                 }
             }
+            
+            wait();
         }
+
+        
         return null;
     }
 
@@ -109,15 +109,5 @@ class AStar{
     //parent ptr => ptr - child reln
     /*private ArrayList<State> path;*/
 
-    private ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
-        System.out.println("Inside reconstruct path");
-        ArrayList<State> path = new ArrayList<State>();
-        while ( currentNode != null ){          
-            path.add(currentNode);
-            currentNode = currentNode.cameFrom;
-        }
-        java.util.Collections.reverse(path);
-        return path;
-   }
-
+ 
 }

@@ -27,6 +27,10 @@ class Problem{
 		return getHx(s) + getGx();
 	}
 	
+	public int getFx(){
+		return getHx(current) + getGx();
+	}
+	
 	public State runMove(State s, int move){
 		return s;
 	}
@@ -36,7 +40,8 @@ class Problem{
 	}
 	
 	ArrayList<State> getNeighbours(State s){
-		int[] moves = MovesList.getMovesList();
+
+		int[] moves = new MovesList().getMovesList();
 		
 		ArrayList<State> newStates = new ArrayList<State>();
 	

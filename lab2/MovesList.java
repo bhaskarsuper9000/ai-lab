@@ -2,14 +2,19 @@ class MovesList{
 
 	public final static int DEFAULT_MOVE = -1;
 	
-	public static int moves[];
+	public int moves[];
+	
+	MovesList(){
+		moves = new int[1];
+		moves[0] = DEFAULT_MOVE;
+	}
 	
 	MovesList(int n){
 		moves = new int[n];
 		moves[0] = DEFAULT_MOVE;
 	}
 	
-	static int[] getMovesList(){
+	int[] getMovesList(){
 		return moves;
 	}
 	

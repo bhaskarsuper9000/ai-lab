@@ -53,25 +53,21 @@ class MCProblem extends Problem{
 	public boolean isMovePossible(State s, int move){
 
 			switch(move){
-				case EightPuzzleMovesList.MOVE_LEFT:
-					if(p.x == 0)
-						return false;
-				break;
-
-				case EightPuzzleMovesList.MOVE_RIGHT:
-					if(p.x == 2)
-						return false;
-				break;
-
-				case EightPuzzleMovesList.MOVE_UP:
-					if(p.y == 0)
-						return false;
-				break;
-
-				case EightPuzzleMovesList.MOVE_DOWN:
-					if(p.y == 2)
-						return false;
-				break;
+				case MCMovesList.SEND_11:
+								tempState.afterMove(MCMovesList.SEND_11);
+							break;
+							case MCMovesList.SEND_20:
+								tempState.afterMove(MCMovesList.SEND_20);
+							break;
+							case MCMovesList.SEND_02:
+								tempState.afterMove(MCMovesList.SEND_02);
+							break;
+							case MCMovesList.SEND_10:
+								tempState.afterMove(MCMovesList.SEND_10);
+							break;
+							case MCMovesList.SEND_01:
+								tempState.afterMove(MCMovesList.SEND_01);
+			break;
 			}
 			return true;
 	}

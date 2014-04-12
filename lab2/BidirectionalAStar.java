@@ -5,21 +5,37 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-class BidirectionalAStar extends Thread{ 
+class BidirectionalAStar extends AStar implements Runnable{ 
+
+	/******* Concurrency stuff *******/
+	private Bag bag;
+    private boolean flag = false;
+    public  boolean running = true;
+    
+    BidirectionalAStar(Bag b, boolean f){
+    	bag = b;
+    	flag = f;
+    	//Thread t = Thread.start(this);
+    }
+
+	public void swapStartGoal(){
+		State t = p.start;
+		p.start = p.goal;
+		p.goal = t;
+	}
 
     public void run(){
-        Thread t1 = new Thread(this);
-        Thread t2 = new Thread(this);
 
-        t1.start();
-        t2.start();
+    	aStarSearch(p.start, p.goal);
 
-        while(t1.p.getCurrent() == t2.p.getCurrent()){
-                t1.
-        }
-
+        running = false;
+        System.out.println("Exiting A-Star : "+flag);
     }
+    /******* Concurrency stuff *******/
+    
     public ArrayList<State> aStarSearch(State start, State goal){
+    	bag.check(flag);
+    
         p.setStart(start);
         p.setGoal(goal);
 
@@ -32,7 +48,7 @@ class BidirectionalAStar extends Thread{
         start.fScore = start.gScore + p.getHx(start);
 
         while(openSet.size() > 0){
-            notify();
+            //this.notifyAll();
 
             current = openSet.poll();
             p.setCurrState(current);
@@ -96,7 +112,10 @@ class BidirectionalAStar extends Thread{
                 }
             }
             
-            wait();
+            try {
+                Thread.sleep((int)(Math.random() * 100));
+            } catch (InterruptedException e) { }
+            
         }
 
         

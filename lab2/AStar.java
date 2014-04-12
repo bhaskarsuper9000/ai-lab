@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 class AStar{
-    private HashSet<State> closedSet;
-    private PriorityQueue<State> openSet;
-    private HashMap<State, State> cameFrom;
+    protected HashSet<State> closedSet;
+    protected PriorityQueue<State> openSet;
+    protected HashMap<State, State> cameFrom;
 
     Problem p;
     State current;
@@ -109,7 +109,7 @@ class AStar{
     //parent ptr => ptr - child reln
     /*private ArrayList<State> path;*/
 
-    private ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
+    protected ArrayList<State> reconstructPath( HashMap<State,State> cameFrom, State currentNode ){
         System.out.println("Inside reconstruct path");
         ArrayList<State> path = new ArrayList<State>();
         while ( currentNode != null ){          

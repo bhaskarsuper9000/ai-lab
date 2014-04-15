@@ -3,10 +3,11 @@
 #Axiom 2: ((A>(B>C))>((A>B)>(A>C)))
 #Axiom 3: (((A>F)>F)>A)
 #from array import *
+import subprocess
+from subprocess import Popen, PIPE
 
-string = ['p>q', 'p']
 
-exprs = ['p','p>q','(p>F)','((p>F))>q','(((p>F))>q)>q','(p>q)>((((p>F))>q)>q)']
+#exprs = ['p','p>q','(p>F)','((p>F))>q','(((p>F))>q)>q','(p>q)>((((p>F))>q)>q)']
 #temp = expr[0:len(expr)]
 
 
@@ -139,36 +140,72 @@ def generateLR(temp):
 	#temp = temp[0:implies]+temp[implies+1:len(temp)]
 	return stripBraces (temp[prev_subs:implies]), stripBraces (temp[implies+1:implies+1+next_subs])
 
+#If Modus Ponens possible, return True, result
 def isMPPossible(L,R,i,j):
 	if L[i] == L[j] and R[j] == '' and R[i] != '':
+		print L[i],'>',R[i],'MP',L[j],'yields',R[i]
 		return True, R[i]
 	if L[i] == L[j] and R[i] == '' and R[j] != '':
+		print L[j],'>',R[j],'MP',L[i],'yields',R[j]
 		return True, R[j]
 	return False, ''
 
+#Check if l,r doesn't exist in L,R...If it doesn't, add it
 def clauseExists(L,R,l,r):
+	if l == '':
+		return False
+
 	for i in range(0,len(L),1):
-		if L[i] == L[j] and R[i] == R[j]:
+		if L[i] == l and R[i] == r:
 			return True
 	L.append(l)
 	R.append(r)
 	return False
 
+def parseExpr(t):
+	stmt = Popen(['java','Parser', t], stdout = subprocess.PIPE).communicate()[0]
+	return stmt.split()
+
 #main code
 L,R = [],[]
+#call(['./java Parser','((p>q)>(((~p)>q)>q))'])
+
+exprs = parseExpr('((p>q)>(((~p)>q)>q))')
+#Need to remove this later
+clauseExists(L,R,'p','')
+
 for expr in exprs:
 	
 	l,r = generateLR(stripBraces(expr))
 
-	L.append(l)
-	R.append(r)
+	#L.append(l)
+	#R.append(r)
+	clauseExists(L,R,l,r)	#This function also appends l,r to L,R
 
 print L,":", R
 
-for i in range(0,len(L),1):
-	for j in range(0,len(L),1):
-		poss, result = isMPPossible(L,R,i,j)
-		print poss, result
+done = False
+while not done:
+
+	#Try applying modus ponens
+	for i in range(0,len(L),1):
+		for j in range(0,len(L),1):
+			poss, result = isMPPossible(L,R,i,j)
+			#print poss, result
+			clauseExists(L,R,result,'')
+			
+	
+	#Check for existance of 'F'
+	for i in range(0,len(L),1):
+		print L[i], '>', R[i]
+		if L[i] == 'F':
+			done = True
+			break
+
+	#Try applying axioms!!!
+	
+
+print 'I am done coz I reached F'	
 
 '''
 print stripBraces('(p>q)>((((p>F))>q)>q)')

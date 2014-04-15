@@ -15,8 +15,8 @@ public class Parser {
 	{
 		// TODO Auto-generated method stub
 		
-		System.out.println("Please enter the expression to be proved");
-		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+		//System.out.println("Please enter the expression to be proved");
+		//BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		try 
 		{
 			//(p ^ q) > (p v q)
@@ -25,7 +25,7 @@ public class Parser {
 			//(p v q) > p
 			//(( p > F) > q) > p
 			
-			String formula=br.readLine();
+			String formula=args[0];//br.readLine();
 			String []units=new String[formula.length()];
 			Stack<Integer> stack =new Stack<Integer>();  
 			
@@ -49,9 +49,9 @@ public class Parser {
 			for(int i=0;i<unit_count;i++)
 			{
 				units[i]=units[i].replaceAll("\\s","");
-				System.out.print(units[i]+", ");
+				//System.out.print(units[i]+", ");
 			}
-			System.out.println();
+			//System.out.println();
 			
 			//lets do it first for binary operators
 			HashMap<String,String> patterns=new HashMap<String,String>();
@@ -221,11 +221,11 @@ public class Parser {
 			}
 			
 		} 
-		catch (IOException e) 
+		/*catch (IOException e) 
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		catch(EmptyStackException e)
 		{
 			System.out.println("Stack is empty, formula is not well formed");

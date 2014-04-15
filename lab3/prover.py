@@ -166,32 +166,66 @@ def parseExpr(t):
 	stmt = Popen(['java','Parser', t], stdout = subprocess.PIPE).communicate()[0]
 	return stmt.split()
 
+#Returns the list of propositions that can be used as substitutions
+#for axioms or theorems
+def getProps(t):
+	props = []
+	for i in range(0,len(t),1):
+		if t[i] != ')' and t[i] != '(' and t[i] != '>' and t[i] != '~' and t[i] != '^' and t[i] != 'v':
+			props.append(t[i])
+
+	temp = []	
+	for p in props:
+		if p != 'F':
+			temp.append(p+'>F')
+	
+	for p in props:
+		for q in props:
+			if p != q:
+				temp.append(p+'>'+q)
+				temp.append(q+'>'+p)
+
+	props = props + temp
+	props = list(set(props))
+	#print props
+	return props
+
+def getAxiom(iterations, default):
+	axioms = ['#>($>#)','(#>($>@))>((#>$)>(#>@)))','((#>F)>F)>#']
+	
+	return axiom
+
+
+#		***********************************
 #main code
 L,R = [],[]
+
 #call(['./java Parser','((p>q)>(((~p)>q)>q))'])
 
 exprs = parseExpr('((p>q)>(((~p)>q)>q))')
+props = getProps('((p>q)>(((~p)>q)>q))')
+
 #Need to remove this later
-clauseExists(L,R,'p','')
+#clauseExists(L,R,'p','')
 
-for expr in exprs:
-	
+for expr in exprs:	
 	l,r = generateLR(stripBraces(expr))
-
-	#L.append(l)
-	#R.append(r)
 	clauseExists(L,R,l,r)	#This function also appends l,r to L,R
 
 print L,":", R
 
 done = False
+iterations = 0
 while not done:
+	iterations += 1
 
 	#Try applying modus ponens
 	for i in range(0,len(L),1):
 		for j in range(0,len(L),1):
 			poss, result = isMPPossible(L,R,i,j)
 			#print poss, result
+			if poss == True:
+				iterations = 0
 			clauseExists(L,R,result,'')
 			
 	
@@ -204,8 +238,23 @@ while not done:
 
 	#Try applying axioms!!!
 	
+	if iterations > 1:
+		print 'What do you want me to do', '[1=Axiom, 2=Theorem, 3=Give up] ?'
+	
+		choice = raw_input()
+		if choice == '1':
+			newStmt = getAxiom()
+		elif choice == '2':
+			newStmt = getTheorem()
+		elif choice == '3':
+			break
+	
 
-print 'I am done coz I reached F'	
+
+if done:
+	print 'I am done coz I reached F'
+else:
+	print 'I give up!'
 
 '''
 print stripBraces('(p>q)>((((p>F))>q)>q)')

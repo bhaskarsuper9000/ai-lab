@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 class BiAStarTester{
 	public static void main(String args[]){
+		Debug.setDebugMode(Debug.DEBUG_OFF);
 		Bag b = new Bag();
 		BidirectionalAStar bast1 = new BidirectionalAStar(b,true);
 		BidirectionalAStar bast2 = new BidirectionalAStar(b,false);
@@ -20,9 +21,13 @@ class BiAStarTester{
 		t1.start();
 		t2.start();
 		
-		while( bast1.running | bast2.running ){
-			if( bast1.current == bast2.current)
+		while( bast1.running && bast2.running ){
+			if( bast1.current!=null && bast2.current!=null && bast1.current.equals( bast2.current ) ){
+				bast1.forcedExit = true;
+				bast2.forcedExit = true;
+				Debug.println("***********************FOUND*********************");
 				break;
+			}
 			System.out.print("");
 		}
 		
@@ -34,12 +39,9 @@ class BiAStarTester{
 		//System.out.println(states == null);
 		
 		
-		/*
-		System.out.println("Printing path");
-        for(State s: states){
-			System.out.println(s);
-		}
-		*/
-
+		
+		System.out.println("[Printing path 1]\n" + bast1.printSolution());
+		
+		System.out.println("[Printing path 2]\n" + bast2.printSolutionReverse());
 	}
 }

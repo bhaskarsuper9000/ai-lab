@@ -16,4 +16,8 @@ class MCMovesList extends MovesList{
 		moves[3] = SEND_10;
 		moves[3] = SEND_01;
 	}
+	
+	int[] getMovesList(){
+		return moves;
+	}
 }

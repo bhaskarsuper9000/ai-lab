@@ -11,6 +11,8 @@ class BidirectionalAStar extends AStar implements Runnable{
 	private Bag bag;
     private boolean flag = false;
     public  boolean running = true;
+    private ArrayList<State> solnStates;	//For storing solution because u cant do it due to run method
+    public boolean forcedExit = false;
     
     BidirectionalAStar(Bag b, boolean f){
     	bag = b;
@@ -24,12 +26,29 @@ class BidirectionalAStar extends AStar implements Runnable{
 		p.goal = t;
 	}
 
+	public String printSolution(){
+		String temp = "";
+		for(State s: solnStates){
+			temp +=s+"\n" ;
+		}
+		return temp;
+	}
+	
+	public String printSolutionReverse(){
+		java.util.Collections.reverse(solnStates);
+		String temp = "";
+		for(State s: solnStates){
+			temp +=s+"\n" ;
+		}
+		return temp;
+	}
+
     public void run(){
 
-    	aStarSearch(p.start, p.goal);
+    	solnStates = aStarSearch(p.start, p.goal);
 
         running = false;
-        System.out.println("Exiting A-Star : "+flag);
+        Debug.println("Exiting A-Star : "+flag);
     }
     /******* Concurrency stuff *******/
     
@@ -52,9 +71,9 @@ class BidirectionalAStar extends AStar implements Runnable{
 
             current = openSet.poll();
             p.setCurrState(current);
-            System.out.println("Next move = "+current+" f(x)="+current.fScore);
+            Debug.println("Next move = "+current+" f(x)="+current.fScore);
 
-            System.out.println("Checking for goal...");
+            Debug.println("Checking for goal...");
             if( current.equals(goal) )
                 return reconstructPath(cameFrom, current);
 
@@ -69,29 +88,29 @@ class BidirectionalAStar extends AStar implements Runnable{
             closedSet.add(current);
             //State tempStates[] = neighbour(current);
             for( State neighbour : p.getNeighbours(current) ){
-                System.out.println("neighbour: "+neighbour+ "f(x)="+neighbour.fScore);
+                Debug.println("neighbour: "+neighbour+ "f(x)="+neighbour.fScore);
                 if(closedSet.contains(neighbour)){
-                    System.out.println("Closed Set contains neighbour");
+                    Debug.println("Closed Set contains neighbour");
                     continue;
                 }
 
                 int tempScore = current.gScore + p.distBetween(current, neighbour);
-                System.out.println("Dist = "+tempScore);
+                Debug.println("Dist = "+tempScore);
 
 
                 if( openSet.contains(neighbour) ){
-                    System.out.println("openSet contains neighbour");
+                    Debug.println("openSet contains neighbour");
                     if(neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
-                        System.out.println("[OSet]Parent pointer redirect");
+                        Debug.println("[OSet]Parent pointer redirect");
                     }
                 }else if( closedSet.contains(neighbour) ){
-                    System.out.println("closedSet contains neighbour");
+                    Debug.println("closedSet contains neighbour");
                     if(neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
-                        System.out.println("[CSet]Parent pointer redirect");
+                        Debug.println("[CSet]Parent pointer redirect");
                     }
 
                     //for all descendents of neighbour, change parent
@@ -106,7 +125,7 @@ class BidirectionalAStar extends AStar implements Runnable{
                     }
 
                 }else{
-                    System.out.println("neither contains neighbour");
+                    Debug.println("neither contains neighbour");
                     neighbour.cameFrom = current;
                     openSet.add(neighbour);
                 }
@@ -114,6 +133,8 @@ class BidirectionalAStar extends AStar implements Runnable{
             
             try {
                 Thread.sleep((int)(Math.random() * 100));
+                if(forcedExit)
+                	return reconstructPath(cameFrom, current);
             } catch (InterruptedException e) { }
             
         }

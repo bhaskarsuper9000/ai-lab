@@ -7,7 +7,7 @@ class AStarTester{
 		ast.p = new EightPuzzle();
 		
 		ArrayList<State> states = ast.aStarSearch();
-		System.out.println(states == null);
+		//System.out.println(states == null);
 		
 		
 		System.out.println("Printing path");

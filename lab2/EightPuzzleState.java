@@ -36,21 +36,21 @@ class EightPuzzleState extends State{
 
 	public boolean equals(Object ob){
 		EightPuzzleState s = (EightPuzzleState) ob;
-		System.out.print("Equals?"+ this+ "=="+s);
+		Debug.print("Equals?"+ this+ "=="+s);
 
         for(int i=0; i<3; i++)
 			for(int j=0; j<3; j++)
 				if(a[i][j] != s.a[i][j]){
-					System.out.println(": false");
+					Debug.println(": false");
                     return false;
                 }
 
-        System.out.println(": true..");
+        Debug.println(": true..");
 		return true;
 	}
 
 	public int compareTo(Object ob){
-		System.out.println("compared");
+		Debug.println("compared");
 		if( ((EightPuzzleState)ob).fScore > fScore )
 			return -1;
 		else if ( ((EightPuzzleState)ob).fScore < fScore )

@@ -1,0 +1,12 @@
+Please enter the expression to be proved
+((p>q)>(((~p)>q)>q))
+
+
+p>q, ~p, (~p)>q, ((~p)>q)>q, (p>q)>(((~p)>q)>q), 
+
+
+1. p>q
+2. (p>F)
+3. ((p>F))>q
+4. (((p>F))>q)>q
+5. (p>q)>((((p>F))>q)>q)

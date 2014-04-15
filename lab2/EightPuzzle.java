@@ -66,28 +66,28 @@ class EightPuzzle extends Problem{
 	public State runMove(State st, int move){
 		EightPuzzleState s = (EightPuzzleState)st;
 		Point p = getPos(0,s);
-		System.out.println("0 found at pos: "+p.x + ","+p.y);
+		Debug.println("0 found at pos: "+p.x + ","+p.y);
 		
 		EightPuzzleState tempState = new EightPuzzleState(s);
 	
 		switch(move){
 			case EightPuzzleMovesList.MOVE_LEFT:
-				System.out.println("Move Left");
+				Debug.println("Move Left");
 				tempState.swap(p,new Point(p.x,p.y-1));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_RIGHT:
-				System.out.println("Move Right");
+				Debug.println("Move Right");
 				tempState.swap(p,new Point(p.x,p.y+1));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_UP:
-				System.out.println("Move Up");
+				Debug.println("Move Up");
 				tempState.swap(p,new Point(p.x-1,p.y));
 			break;
 			
 			case EightPuzzleMovesList.MOVE_DOWN:
-				System.out.println("Move Down");
+				Debug.println("Move Down");
 				tempState.swap(p,new Point(p.x+1,p.y));
 			break;
 		}

@@ -40,8 +40,10 @@ class BiAStarTester{
 		
 		
 		
-		System.out.println("[Printing path 1]\n" + bast1.printSolution());
+		bast1.showStatus();
+		bast2.showStatus();
 		
+		System.out.println("[Printing path 1]\n" + bast1.printSolution());
 		System.out.println("[Printing path 2]\n" + bast2.printSolutionReverse());
 	}
 }

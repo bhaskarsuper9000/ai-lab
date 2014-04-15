@@ -9,6 +9,16 @@ class AStar{
     protected HashSet<State> closedSet;
     protected PriorityQueue<State> openSet;
     protected HashMap<State, State> cameFrom;
+    
+    protected int ITERATIONS = 0;
+    protected int PARENT_REDIRECTS = 0;
+    protected int PATH_LENGTH = 0;
+    
+    void showStatus(){
+    	System.out.println("No of Iterations = "+ ITERATIONS);
+    	System.out.println("Path Length 	 = "+ PATH_LENGTH);
+    	System.out.println("Parent Ptr Redir = "+ PARENT_REDIRECTS +" times");
+    }
 
     Problem p;
     State current;
@@ -38,6 +48,8 @@ class AStar{
         start.fScore = start.gScore + p.getHx(start);
 
         while(openSet.size() > 0){
+        	ITERATIONS++;
+        
             current = openSet.poll();
             p.setCurrState(current);
             Debug.println("Next move = "+current+" f(x)="+current.fScore);
@@ -68,17 +80,19 @@ class AStar{
 
 
                 if( openSet.contains(neighbour) ){
-                    Debug.println("openSet contains neighbour");
-                    if(neighbour.cameFrom.gScore > current.gScore){
+                    //Debug.println("openSet contains neighbour" + openSet + ": "+neighbour + "#");
+                    if( neighbour.cameFrom == null || neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
+                        PARENT_REDIRECTS++;
                         Debug.println("[OSet]Parent pointer redirect");
                     }
                 }else if( closedSet.contains(neighbour) ){
                     Debug.println("closedSet contains neighbour");
-                    if(neighbour.cameFrom.gScore > current.gScore){
+                    if( neighbour.cameFrom == null || neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
+                        PARENT_REDIRECTS++;
                         Debug.println("[CSet]Parent pointer redirect");
                     }
 
@@ -89,6 +103,7 @@ class AStar{
                             if(des.cameFrom.gScore > neighbour.gScore){
                                 des.cameFrom = neighbour;
                                 des.gScore = neighbour.gScore;
+                                PARENT_REDIRECTS++;
                             }
                         }								
                     }
@@ -116,6 +131,7 @@ class AStar{
             path.add(currentNode);
             currentNode = currentNode.cameFrom;
         }
+        PATH_LENGTH = path.size();
         java.util.Collections.reverse(path);
         return path;
    }

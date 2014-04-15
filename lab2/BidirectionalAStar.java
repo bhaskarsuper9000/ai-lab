@@ -14,6 +14,13 @@ class BidirectionalAStar extends AStar implements Runnable{
     private ArrayList<State> solnStates;	//For storing solution because u cant do it due to run method
     public boolean forcedExit = false;
     
+    private State COMMON_NODE;
+    void showStatus(){
+    	super.showStatus();
+    	System.out.println("Common Node 	 = "+ COMMON_NODE);
+    }
+
+    
     BidirectionalAStar(Bag b, boolean f){
     	bag = b;
     	flag = f;
@@ -68,14 +75,17 @@ class BidirectionalAStar extends AStar implements Runnable{
 
         while(openSet.size() > 0){
             //this.notifyAll();
+			ITERATIONS++;
 
             current = openSet.poll();
             p.setCurrState(current);
             Debug.println("Next move = "+current+" f(x)="+current.fScore);
 
             Debug.println("Checking for goal...");
-            if( current.equals(goal) )
+            if( current.equals(goal) ){
+            	COMMON_NODE = current;
                 return reconstructPath(cameFrom, current);
+            }
 
             if(current.cameFrom == null)    
                 current.gScore = 0;
@@ -103,6 +113,7 @@ class BidirectionalAStar extends AStar implements Runnable{
                     if(neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
+                        PARENT_REDIRECTS++;
                         Debug.println("[OSet]Parent pointer redirect");
                     }
                 }else if( closedSet.contains(neighbour) ){
@@ -110,6 +121,7 @@ class BidirectionalAStar extends AStar implements Runnable{
                     if(neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
+                        PARENT_REDIRECTS++;
                         Debug.println("[CSet]Parent pointer redirect");
                     }
 
@@ -120,6 +132,7 @@ class BidirectionalAStar extends AStar implements Runnable{
                             if(des.cameFrom.gScore > neighbour.gScore){
                                 des.cameFrom = neighbour;
                                 des.gScore = neighbour.gScore;
+                                PARENT_REDIRECTS++;
                             }
                         }								
                     }
@@ -133,8 +146,10 @@ class BidirectionalAStar extends AStar implements Runnable{
             
             try {
                 Thread.sleep((int)(Math.random() * 100));
-                if(forcedExit)
+                if(forcedExit){
+                	COMMON_NODE = current;
                 	return reconstructPath(cameFrom, current);
+                }
             } catch (InterruptedException e) { }
             
         }

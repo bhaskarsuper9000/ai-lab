@@ -3,10 +3,12 @@ import java.util.ArrayList;
 class Point{ int x,y; Point(int x, int y){this.x=x; this.y=y;}}
 class EightPuzzle extends Problem{
 
+	public static final int NO_HEURISTIC = 0;
 	public static final int DISPLACED_TILE = 1;
 	public static final int MANHATTEN_DIST = 2;
+	public static final int MANHATTEN_PENALTY = 3;	//Over-estimated
 	
-	private int heuristic = MANHATTEN_DIST;
+	private int heuristic = NO_HEURISTIC;
 	
 	EightPuzzle(){
 		//set the states to a default problem
@@ -19,7 +21,7 @@ class EightPuzzle extends Problem{
 		goal = tempSt;
 		start.gScore = 0;
 		
-		setHeuristic(MANHATTEN_DIST);
+		setHeuristic(NO_HEURISTIC);
 	}
 	
 	public void setHeuristic(int n){
@@ -44,6 +46,9 @@ class EightPuzzle extends Problem{
 	public int getHx(State s){
 		int total = 0;
 		switch(heuristic){
+			case NO_HEURISTIC:
+			break;
+
 			case DISPLACED_TILE:
 				for(int i=1; i<=8; i++){
 					Point p = getPos(i,s);

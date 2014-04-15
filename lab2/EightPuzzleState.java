@@ -5,7 +5,7 @@ class EightPuzzleState extends State{
 
 
 	public EightPuzzleState(){
-		int temp[][] = {{0,2,3},{1,5,6},{4,7,8}}; //initial state
+		int temp[][] = {{0,2,3},{1,4,5},{7,8,6}}; //initial state
 		a = temp;
 	}
 	//copy a state constructor

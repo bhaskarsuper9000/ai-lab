@@ -110,7 +110,7 @@ class BidirectionalAStar extends AStar implements Runnable{
 
                 if( openSet.contains(neighbour) ){
                     Debug.println("openSet contains neighbour");
-                    if(neighbour.cameFrom.gScore > current.gScore){
+                    if(neighbour.cameFrom == null || neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
                         PARENT_REDIRECTS++;
@@ -118,7 +118,7 @@ class BidirectionalAStar extends AStar implements Runnable{
                     }
                 }else if( closedSet.contains(neighbour) ){
                     Debug.println("closedSet contains neighbour");
-                    if(neighbour.cameFrom.gScore > current.gScore){
+                    if(neighbour.cameFrom == null || neighbour.cameFrom.gScore > current.gScore){
                         neighbour.cameFrom = current;
                         neighbour.gScore = current.gScore;
                         PARENT_REDIRECTS++;
@@ -145,7 +145,7 @@ class BidirectionalAStar extends AStar implements Runnable{
             }
             
             try {
-                Thread.sleep((int)(Math.random() * 100));
+                Thread.sleep((int)(Math.random() * 10));
                 if(forcedExit){
                 	COMMON_NODE = current;
                 	return reconstructPath(cameFrom, current);

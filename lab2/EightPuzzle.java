@@ -21,7 +21,7 @@ class EightPuzzle extends Problem{
 		goal = tempSt;
 		start.gScore = 0;
 		
-		setHeuristic(NO_HEURISTIC);
+		setHeuristic(DISPLACED_TILE);
 	}
 	
 	public void setHeuristic(int n){

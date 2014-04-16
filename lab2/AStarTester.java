@@ -3,6 +3,7 @@ import java.util.ArrayList;
 class AStarTester{
 	public static void main(String args[]){
 		AStar ast = new AStar();
+		Debug.setDebugMode(Debug.DEBUG_OFF);
 		
 		ast.p = new EightPuzzle();
 		

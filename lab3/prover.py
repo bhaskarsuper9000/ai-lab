@@ -5,6 +5,7 @@
 #from array import *
 import subprocess
 from subprocess import Popen, PIPE
+import sys
 
 
 #exprs = ['p','p>q','(p>F)','((p>F))>q','(((p>F))>q)>q','(p>q)>((((p>F))>q)>q)']
@@ -12,7 +13,7 @@ from subprocess import Popen, PIPE
 
 
 def findLeftBrace(t):
-	print 'This is t in left brace' , t
+	#print 'This is t in left brace' , t
 	count = 0
 	flag = False
 
@@ -30,7 +31,7 @@ def findLeftBrace(t):
 	return 0			
 	
 def findRightBrace(t):
-	print 'This is t in right brace' , t
+	#print 'This is t in right brace' , t
 	count = 0
 	flag = True
 
@@ -40,7 +41,7 @@ def findRightBrace(t):
 			count += 1
 			flag = True
 		elif t[i] == ')':
-			print count
+			#print count
 			if count == 0 :
 				return i
 			count -= 1
@@ -78,7 +79,7 @@ def stripBraces(temp):
 	bPos = dict()
 	count = 0
 	for i in xrange(0, len(temp), 1):
-		print count, ":", i, temp[0:i-1],"^",temp[i+1:len(temp)],"**",bPos
+		#print count, ":", i, temp[0:i-1],"^",temp[i+1:len(temp)],"**",bPos
 		if temp[i] == '(':
 			count += 1
 			bPos[i] = count
@@ -87,7 +88,7 @@ def stripBraces(temp):
 				if bPos[k] == count:
 					bPos[k] = i
 			count -= 1
-	print bPos
+	#print bPos
 	
 	it = iter(bPos)
 	
@@ -168,7 +169,7 @@ def parseExpr(t):
 
 #Returns the list of propositions that can be used as substitutions
 #for axioms or theorems
-def getProps(t):
+def getPropositions(t):
 	props = []
 	for i in range(0,len(t),1):
 		if t[i] != ')' and t[i] != '(' and t[i] != '>' and t[i] != '~' and t[i] != '^' and t[i] != 'v':
@@ -190,11 +191,44 @@ def getProps(t):
 	#print props
 	return props
 
-def getAxiom(iterations, default):
+#parenthesizes exprs if reqd
+def sanit(d):
+	if len(d) == 1:
+		return d
+	return '('+d+')'
+
+def getAxiom(default):
 	axioms = ['#>($>#)','(#>($>@))>((#>$)>(#>@)))','((#>F)>F)>#']
+	
+	axiom = []
+	#Apply axiom 1 combinations
+	for i in range(0,len(default),1):
+		for j in range(0,len(default),1):
+			temp = axioms[0].replace('#', sanit(default[i]))
+			temp = temp.replace('$',sanit(default[j]))
+			axiom.append(temp)
+	
+	#Apply axiom 2 combinations		
+	for i in range(0,len(default),1):
+		for j in range(0,len(default),1):
+			for k in range(0,len(default),1):
+				temp = axioms[1].replace('#',sanit(default[i]))
+				temp = temp.replace('$',sanit(default[j]))
+				temp = temp.replace('@',sanit(default[k]))
+				axiom.append(temp)
+				
+	for i in range(0,len(default),1):
+		temp = axioms[2].replace('#',sanit(default[i]))
+		axiom.append(temp)
+	
+	axiom = list(set(axiom))	
+	#print axiom
 	
 	return axiom
 
+def getTheorem():
+	return ''
+	
 
 #		***********************************
 #main code
@@ -203,7 +237,7 @@ L,R = [],[]
 #call(['./java Parser','((p>q)>(((~p)>q)>q))'])
 
 exprs = parseExpr('((p>q)>(((~p)>q)>q))')
-props = getProps('((p>q)>(((~p)>q)>q))')
+props = getPropositions('((p>q)>(((~p)>q)>q))')
 
 #Need to remove this later
 #clauseExists(L,R,'p','')
@@ -218,6 +252,11 @@ done = False
 iterations = 0
 while not done:
 	iterations += 1
+	
+	#Animation to show that process is still alive
+	if iterations%20 == 0:
+		sys.stdout.write('.')
+		sys.stdout.flush()
 
 	#Try applying modus ponens
 	for i in range(0,len(L),1):
@@ -231,19 +270,24 @@ while not done:
 	
 	#Check for existance of 'F'
 	for i in range(0,len(L),1):
-		print L[i], '>', R[i]
+		#print L[i], '>', R[i]
 		if L[i] == 'F':
 			done = True
 			break
 
 	#Try applying axioms!!!
 	
-	if iterations > 1:
-		print 'What do you want me to do', '[1=Axiom, 2=Theorem, 3=Give up] ?'
+	if iterations > 1000:
+		#print L,':',R
+		print '\nWhat do you want me to do', '[1=Axiom, 2=Theorem, 3=Give up] ?'
 	
 		choice = raw_input()
 		if choice == '1':
-			newStmt = getAxiom()
+			newStmts = getAxiom(props)
+			for s in newStmts:
+				iterations = 0
+				l,r = generateLR(stripBraces(s))
+				clauseExists(L,R,l,r)
 		elif choice == '2':
 			newStmt = getTheorem()
 		elif choice == '3':

@@ -1,0 +1,24 @@
+['p', 'p', 'p>F', '((p>F))>q', 'p>q'] : ['q', 'F', 'q', 'q', '(((p>F))>q)>q']
+..........
+What do you want me to do [1=Axiom, 2=Theorem, 3=Give up] ?
+2
+Enter a theorem to be applied (with proper braces)
+((~(pvq))>((~p)^(~q)))
+q > (q>p)>q MP q yields (q>p)>q
+q > p>q MP q yields p>q
+p>q > p>(p>q) MP p>q yields p>(p>q)
+q > (p>F)>q MP q yields (p>F)>q
+q > (q>F)>q MP q yields (q>F)>q
+p>q > (q>p)>(p>q) MP p>q yields (q>p)>(p>q)
+q > (p>q)>q MP q yields (p>q)>q
+q > q>q MP q yields q>q
+(q>p)>(p>q) > ((q>p)>p)>((q>p)>q) MP (q>p)>(p>q) yields ((q>p)>p)>((q>p)>q)
+q > (q>p)>q MP q yields (q>p)>q
+q > p>q MP q yields p>q
+q > (p>F)>q MP q yields (p>F)>q
+q > (q>F)>q MP q yields (q>F)>q
+q > (p>q)>q MP q yields (p>q)>q
+q > q>q MP q yields q>q
+q > F MP q yields F
+q > F MP q yields F
+I am done coz I reached F

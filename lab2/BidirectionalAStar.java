@@ -145,7 +145,8 @@ class BidirectionalAStar extends AStar implements Runnable{
             }
             
             try {
-                Thread.sleep((int)(Math.random() * 10));
+                //Thread.sleep((int)(Math.random() * 100));
+                Thread.sleep(100);
                 if(forcedExit){
                 	COMMON_NODE = current;
                 	return reconstructPath(cameFrom, current);

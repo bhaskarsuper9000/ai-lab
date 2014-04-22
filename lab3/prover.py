@@ -197,38 +197,78 @@ def sanit(d):
 		return d
 	return '('+d+')'
 
-def getAxiom(default):
+def getAxiom(thresh, iterations, default):
 	axioms = ['#>($>#)','(#>($>@))>((#>$)>(#>@)))','((#>F)>F)>#']
 	
 	axiom = []
-	#Apply axiom 1 combinations
-	for i in range(0,len(default),1):
-		for j in range(0,len(default),1):
-			temp = axioms[0].replace('#', sanit(default[i]))
-			temp = temp.replace('$',sanit(default[j]))
+	
+	if iterations < thresh[1]:
+		#Apply axiom 1 combinations
+		for i in range(0,len(default),1):
+			for j in range(0,len(default),1):
+				temp = axioms[0].replace('#', sanit(default[i]))
+				temp = temp.replace('$',sanit(default[j]))
+				axiom.append(temp)
+	
+		#Apply axiom 2 combinations		
+		for i in range(0,len(default),1):
+			for j in range(0,len(default),1):
+				for k in range(0,len(default),1):
+					temp = axioms[1].replace('#',sanit(default[i]))
+					temp = temp.replace('$',sanit(default[j]))
+					temp = temp.replace('@',sanit(default[k]))
+					axiom.append(temp)
+				
+		for i in range(0,len(default),1):
+			temp = axioms[2].replace('#',sanit(default[i]))
 			axiom.append(temp)
 	
-	#Apply axiom 2 combinations		
-	for i in range(0,len(default),1):
-		for j in range(0,len(default),1):
-			for k in range(0,len(default),1):
-				temp = axioms[1].replace('#',sanit(default[i]))
-				temp = temp.replace('$',sanit(default[j]))
-				temp = temp.replace('@',sanit(default[k]))
-				axiom.append(temp)
-				
-	for i in range(0,len(default),1):
-		temp = axioms[2].replace('#',sanit(default[i]))
-		axiom.append(temp)
-	
-	axiom = list(set(axiom))	
-	#print axiom
+		axiom = list(set(axiom))
+		#print axiom		
+	elif iterations > thresh[1]:
+		print '\nWhich axiom do you want to use ?[1,2,3]'
+		ch = raw_input()
+		if ch == '1':
+			print 'Enter 2 variables to be substituted'
+			i = raw_input()
+			j = raw_input()
+			temp = axioms[0].replace('#', sanit(i))
+			temp = temp.replace('$',sanit(j))
+			axiom.append(temp)
+		elif ch == '2':
+			print 'Enter the 3 variables to be substituted'
+			i = raw_input()
+			j = raw_input()
+			k = raw_input()
+			temp = axioms[1].replace('#',sanit(i))
+			temp = temp.replace('$',sanit(j))
+			temp = temp.replace('@',sanit(k))
+			axiom.append(temp)
+		elif ch == '3':
+			print 'Enter 1 variable to be substituted'
+			i = raw_input()
+			temp = axioms[2].replace('#',sanit(i))
+			axiom.append(temp)
+		else:
+			print 'You selected an invalid operation'
+	else:
+		print "I don't think this is working. I suggest you try the theorem option instead!"
+		iterations = 101		
 	
 	return axiom
 
-def getTheorem():
-	return ''
+def getTheorem(L,R):
+	print 'Enter a theorem to be applied (with proper braces)'
+	t = raw_input()
+	exprs = parseExpr('('+t+')')
+	#print exprs
+	for expr in exprs:	
+		l,r = generateLR(stripBraces(expr))
+		#print l,r
+		clauseExists(L,R,l,r)
 	
+	#for i in range(0, len(L),1):
+		#print L[i],':',R[i]
 
 #		***********************************
 #main code
@@ -250,6 +290,8 @@ print L,":", R
 
 done = False
 iterations = 0
+thresh = [100,200,300,400]
+
 while not done:
 	iterations += 1
 	
@@ -274,22 +316,34 @@ while not done:
 		if L[i] == 'F':
 			done = True
 			break
+	#Redundancy to make sure, we dont go far!
+	if done:
+		break
 
 	#Try applying axioms!!!
 	
-	if iterations > 1000:
+	if iterations > thresh[0]:
 		#print L,':',R
-		print '\nWhat do you want me to do', '[1=Axiom, 2=Theorem, 3=Give up] ?'
-	
-		choice = raw_input()
+		#thresh[0] = thresh[1]	
+		choice = '0'
+		
+		if iterations < thresh[1]:
+			choice = '1'
+		
+		if iterations > thresh[1]:
+			print '\nWhat do you want me to do', '[1=Axiom, 2=Theorem, 3=Give up] ?'
+			choice = raw_input()
+
+		
 		if choice == '1':
-			newStmts = getAxiom(props)
+			newStmts = getAxiom(thresh,iterations,props)
 			for s in newStmts:
-				iterations = 0
+				#iterations = 0
+				#print s
 				l,r = generateLR(stripBraces(s))
 				clauseExists(L,R,l,r)
 		elif choice == '2':
-			newStmt = getTheorem()
+			getTheorem(L,R)
 		elif choice == '3':
 			break
 	
